@@ -2,6 +2,10 @@ function clearUsers(state) {
     state.users = [];
 }
 
+function clearEvents(state) {
+    state.events = [];
+}
+
 const mutations = {
     setAuth(state, data) {
         state.auth = {
@@ -22,6 +26,7 @@ const mutations = {
         };
 
         clearUsers(state);
+        clearEvents(state);
     },
     setUsers(state, users) {
         state.users = users;
@@ -32,7 +37,10 @@ const mutations = {
         if (index !== -1) {
             state.users.splice(index, 1);
         }
-    }
+    },
+    setEvents(state, events) {
+        state.events = events;
+    },
 }
 
 export default mutations;

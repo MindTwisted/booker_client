@@ -122,7 +122,22 @@ const actions = {
                     });
                 });
         });
-},
+    },
+    getEvents(context) {
+        return new Promise((resolve, reject) => {
+            api.fetchEvents()
+                .then(response => {
+                    context.commit('setEvents', response.data.message.data);
+
+                    resolve();
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text
+                    })
+                });
+        });
+    },
 }
 
 export default actions;

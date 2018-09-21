@@ -3,6 +3,8 @@ import axios from 'axios'
 import router from './router'
 
 import Notifications from 'vue-notification'
+import VueChartkick from 'vue-chartkick'
+import Chart from 'chart.js'
 
 import App from './App.vue'
 import store from './store/index'
@@ -21,7 +23,7 @@ axios.interceptors.response.use(
     const response = error.response;
 
     if (+response.status === 401) {
-      context.commit('removeAuth');
+      store.commit('removeAuth');
 
       localStorage.removeItem('id');
       localStorage.removeItem('token');
@@ -48,6 +50,7 @@ Vue.filter('ucfirst', function (value) {
 })
 
 Vue.use(Notifications)
+Vue.use(VueChartkick, {adapter: Chart})
 
 new Vue({
   router,

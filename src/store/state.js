@@ -6,7 +6,8 @@ const state = {
         email: localStorage.getItem('email') || '',
         role: localStorage.getItem('role') || ''
     },
-    users: []
+    users: [],
+    events: []
 }
 
 export default state;

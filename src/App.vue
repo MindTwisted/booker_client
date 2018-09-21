@@ -19,6 +19,7 @@
 @import '~bulma/sass/elements/form';
 @import '~bulma/sass/elements/table';
 @import '~bulma/sass/elements/other';
+@import '~bulma/sass/elements/box';
 @import '~bulma/sass/components/navbar';
 @import '~bulma/sass/components/modal';
 @import '~bulma/sass/components/menu';
