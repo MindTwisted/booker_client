@@ -78,6 +78,18 @@ export default new Router({
           beforeEnter: checkAdmin
         },
         {
+          path: 'users/:id/edit',
+          name: 'dashboard.users.edit',
+          component: () => import ('./views/dashboard/users/Edit.vue'),
+          beforeEnter: (to, from, next) => {
+            if (store.state.users.length === 0) {
+              return next({name: 'dashboard.users'});
+            }
+
+            return next();
+          }
+        },
+        {
           path: 'rooms',
           name: 'dashboard.rooms',
           component: () => import ('./views/dashboard/rooms/Rooms.vue'),

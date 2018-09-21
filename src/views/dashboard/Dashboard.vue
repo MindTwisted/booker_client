@@ -74,7 +74,7 @@ export default {
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 100;
+    z-index: 125;
   }
 
   &__aside {
@@ -105,5 +105,22 @@ export default {
   }
 }
 </style>
+
+<style lang="scss">
+.dashboard {
+    &__title {
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem 0;
+    }
+
+    &__actions {
+      & > * {
+        margin-right: 0.25rem;
+      }
+    }
+}
+</style>
+
 
 

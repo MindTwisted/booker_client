@@ -56,4 +56,29 @@ export default {
                 });
         });
     },
+    updateUser(data) {
+        return new Promise((resolve, reject) => {
+            axios.put(
+                    `${rootUrl}/api/users/${data.id}`,
+                    `name=${data.name}&email=${data.email}&password=${data.password}`
+                )
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                });
+        });
+    },
+    deleteUser(id) {
+        return new Promise((resolve, reject) => {
+            axios.delete(`${rootUrl}/api/users/${id}`)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                });
+        });
+    },
 }

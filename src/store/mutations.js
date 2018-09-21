@@ -25,6 +25,13 @@ const mutations = {
     },
     setUsers(state, users) {
         state.users = users;
+    },
+    deleteUser(state, id) {
+        const index = state.users.findIndex(user => +user.id === +id);
+
+        if (index !== -1) {
+            state.users.splice(index, 1);
+        }
     }
 }
 

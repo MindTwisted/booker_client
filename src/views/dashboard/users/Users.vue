@@ -1,8 +1,11 @@
 <template>
     <div class="users">
-        <h1 class="title">Users</h1>
 
-        <div class="users__add">
+        <loader v-if="isLoading"></loader>
+
+        <div class="dashboard__title">
+            <h1 class="title">Users</h1>
+        
             <router-link v-bind:to="{name: 'dashboard.users.create'}" 
                         class="button is-success">
                 Create
@@ -22,17 +25,9 @@
             </thead>
 
             <tbody>
-                <tr v-for="user in users" v-bind:key="user.id">
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>{{ user.email }}</td>
-                    <td class="users__actions">
-                        <router-link v-bind:to="'users/' + user.id + '/edit'" class="button is-primary is-small">
-                            Edit
-                        </router-link>
-                    </td>
-                </tr>
+                <user-item v-for="user in users" 
+                        v-bind:key="user.id" 
+                        v-bind:user="user"></user-item>
             </tbody>
             <tfoot>
                 <tr>
@@ -50,11 +45,24 @@
 
 <script>
 import Vuex from 'vuex'
+import Loader from '@/components/Loader'
+import UserItem from '@/views/dashboard/users/UserItem'
 
 export default {
     name: 'users',
+    components: {
+        'loader': Loader,
+        'user-item': UserItem
+    },
+    data() {
+        return {
+            isLoading: false
+        }
+    },
     beforeRouteEnter(to, from, next) {
         next(vm => {
+            vm.isLoading = true;
+
             vm.getUsers()
                 .then(() => {
 
@@ -66,7 +74,8 @@ export default {
                         type: 'error',
                         text: error.text
                     });
-                });
+                })
+                .finally(() => vm.isLoading = false);
         });
     },
     computed: {
@@ -81,14 +90,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.users {
-    &__add {
-        text-align: right;
-        margin-bottom: 2rem;
-    }
-}
-</style>
-
-

@@ -1,9 +1,9 @@
 <template>
-    <div class="create" 
-        v-on:keyup.enter="handleCreateUser">
+     <div class="create" 
+        v-on:keyup.enter="handleUpdateUser">
 
         <div class="dashboard__title">
-            <h1 class="title">Create User</h1>
+            <h1 class="title">Update User # {{ user.id }}</h1>
         
             <router-link v-bind:to="{name: 'dashboard.users'}"
                         class="button is-success">
@@ -45,10 +45,16 @@
             </div>
 
             <div class="field">
-                <label class="label">Password</label>
+                <label class="label">
+                    Password
+                    <button v-if="!isPasswordEditable"
+                            v-on:click="togglePasswordEditable"
+                            class="button is-primary is-small">Edit</button>
+                </label>
                 <div class="control">
                     <input v-model.trim="password" 
                         v-bind:class="{ input:true, 'is-danger':errors.password.length > 0 }"
+                        v-bind:disabled="!isPasswordEditable"
                         type="password" 
                         placeholder="Password">
                 </div>
@@ -61,12 +67,12 @@
 
             <div class="field">
                 <button v-if="!isLoading" 
-                    v-on:click="handleCreateUser" 
+                    v-on:click="handleUpdateUser" 
                     class="button is-success">
-                    Create
+                    Update
                 </button>
                 <button v-else class="button is-success is-loading" disabled>
-                    Create
+                    Update
                 </button>
             </div>
 
@@ -79,7 +85,7 @@
 import Vuex from 'vuex'
 
 export default {
-    name: 'create-user',
+    name: 'edit-user',
     data() {
         return {
             name: '',
@@ -90,17 +96,31 @@ export default {
                 email: [],
                 password: []
             },
-            isLoading: false
+            isLoading: false,
+            isPasswordEditable: false
         }
+    },
+    mounted() {
+        this.name = this.user.name;
+        this.email = this.user.email;
+    },
+    computed: {
+        ...Vuex.mapGetters([
+            'getUserById'
+        ]),
+        user() {
+            return this.getUserById(this.$route.params.id);
+        },
     },
     methods: {
         ...Vuex.mapActions([
-            'addUser'
+            'updateUser'
         ]),
-        handleCreateUser() {
+        handleUpdateUser() {
             this.isLoading = true;
 
-            this.addUser({
+            this.updateUser({
+                id: this.user.id,
                 name: this.name,
                 email: this.email,
                 password: this.password
@@ -140,6 +160,9 @@ export default {
                 this.errors.password = passwordErrors ? passwordErrors : [];
             })
             .finally(() => this.isLoading = false);
+        },
+        togglePasswordEditable() {
+            this.isPasswordEditable = !this.isPasswordEditable;
         }
     }
 }

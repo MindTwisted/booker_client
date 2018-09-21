@@ -12,6 +12,11 @@ const getters = {
             state.auth.name &&
             state.auth.email &&
             state.auth.role === 'admin';
+    },
+    getUserById(state) {
+        return (id) => {
+            return state.users.filter(user => +user.id === +id)[0];
+        }
     }
 }
 

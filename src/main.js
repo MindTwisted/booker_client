@@ -13,6 +13,28 @@ if (AUTH_TOKEN) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`;
 }
 
+axios.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    const response = error.response;
+
+    if (+response.status === 401) {
+      context.commit('removeAuth');
+
+      localStorage.removeItem('id');
+      localStorage.removeItem('token');
+      localStorage.removeItem('name');
+      localStorage.removeItem('email');
+      localStorage.removeItem('role');
+
+      router.push({name: 'login'});
+    }
+
+    return Promise.reject(error);
+  });
+
 Vue.config.productionTip = false
 
 Vue.directive('focus', {

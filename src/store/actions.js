@@ -90,6 +90,39 @@ const actions = {
                 });
         });
     },
+    updateUser(context, data) {
+        return new Promise((resolve, reject) => {
+            api.updateUser(data)
+                .then(response => {
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text,
+                        data: error.data.message.data
+                    });
+                });
+        });
+    },
+    deleteUser(context, id) {
+        return new Promise((resolve, reject) => {
+            api.deleteUser(id)
+                .then(response => {
+                    context.commit('deleteUser', id);
+                    
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text
+                    });
+                });
+        });
+},
 }
 
 export default actions;
