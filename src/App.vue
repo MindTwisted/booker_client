@@ -17,11 +17,15 @@
 @import '~bulma/sass/elements/title';
 @import '~bulma/sass/elements/button';
 @import '~bulma/sass/elements/form';
+@import '~bulma/sass/elements/table';
 @import '~bulma/sass/elements/other';
+@import '~bulma/sass/components/breadcrumb';
 @import '~bulma/sass/components/navbar';
 @import '~bulma/sass/components/modal';
+@import '~bulma/sass/components/menu';
 
 #app {
   font-family: 'Raleway', sans-serif;
+  height: 1000px;
 }
 </style>

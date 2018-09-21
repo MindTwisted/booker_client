@@ -68,7 +68,7 @@ export default {
                         text: data.text
                     });
 
-                    this.$router.push('/login');
+                    this.$router.push({name: 'login'});
                 });
         },
         toggleActive() {

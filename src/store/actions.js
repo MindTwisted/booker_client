@@ -35,7 +35,10 @@ const actions = {
                     });
                 })
                 .catch(error => {
-                    reject(error);
+                    reject({
+                        text: error.data.message.text,
+                        data: error.data.message.data
+                    });
                 });
         });
     },
@@ -55,7 +58,38 @@ const actions = {
                 text: `User '${name}' was successfully logged out.`
             });
         });
-    }
+    },
+    getUsers(context) {
+        return new Promise((resolve, reject) => {
+            api.fetchUsers()
+                .then(response => {
+                    context.commit('setUsers', response.data.message.data);
+
+                    resolve();
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text
+                    })
+                });
+        });
+    },
+    addUser(context, data) {
+        return new Promise((resolve, reject) => {
+            api.addUser(data)
+                .then(response => {
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text,
+                        data: error.data.message.data
+                    });
+                });
+        });
+    },
 }
 
 export default actions;

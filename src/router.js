@@ -6,9 +6,17 @@ import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
 
+const checkAdmin = (to, from, next) => {
+  if (!store.getters.isAdmin) {
+    return next({name: 'dashboard.stats'});
+  } 
+
+  return next();
+};
+
 const checkAuth = (to, from, next) => {
   if (!store.getters.isAuth) {
-    return next('/login');
+    return next({name: 'login'});
   } 
 
   return next();
@@ -16,7 +24,7 @@ const checkAuth = (to, from, next) => {
 
 const checkGuest = (to, from, next) => {
   if (store.getters.isAuth) {
-    return next('/dashboard');
+    return next({name: 'dashboard.stats'});
   } 
 
   return next();
@@ -27,7 +35,7 @@ export default new Router({
     {
       path: '/',
       redirect: {
-        name: 'dashboard'
+        name: 'dashboard.stats'
       }
     },
     {
@@ -38,9 +46,44 @@ export default new Router({
     },
     {
       path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('./views/Dashboard.vue'),
-      beforeEnter: checkAuth
+      component: () => import('./views/dashboard/Dashboard.vue'),
+      beforeEnter: checkAuth,
+      children: [
+        {
+          path: '',
+          redirect: {
+            name: 'dashboard.stats'
+          }
+        },
+        {
+          path: 'stats',
+          name: 'dashboard.stats',
+          component: () => import ('./views/dashboard/stats/Stats.vue'),
+        },
+        {
+          path: 'events',
+          name: 'dashboard.events',
+          component: () => import ('./views/dashboard/events/Events.vue'),
+        },
+        {
+          path: 'users',
+          name: 'dashboard.users',
+          component: () => import ('./views/dashboard/users/Users.vue'),
+          beforeEnter: checkAdmin
+        },
+        {
+          path: 'users/create',
+          name: 'dashboard.users.create',
+          component: () => import ('./views/dashboard/users/Create.vue'),
+          beforeEnter: checkAdmin
+        },
+        {
+          path: 'rooms',
+          name: 'dashboard.rooms',
+          component: () => import ('./views/dashboard/rooms/Rooms.vue'),
+          beforeEnter: checkAdmin
+        }
+      ]
     },
     {
       path: '/not-found',

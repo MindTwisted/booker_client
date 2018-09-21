@@ -30,5 +30,30 @@ export default {
                     reject(error.response);
                 });
         });
-    }
+    },
+    fetchUsers() {
+        return new Promise((resolve, reject) => {
+            axios.get(`${rootUrl}/api/users/`)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                });
+        });
+    },
+    addUser(data) {
+        return new Promise((resolve, reject) => {
+            axios.post(
+                    `${rootUrl}/api/users/`,
+                    `name=${data.name}&email=${data.email}&password=${data.password}`
+                )
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                });
+        });
+    },
 }

@@ -14,8 +14,7 @@
                         <div class="control">
                             <input v-model.trim="email" 
                                 v-focus
-                                v-bind:class="{ input:true, 'is-danger':errors.email.length > 0 }"
-                                ref="email" 
+                                v-bind:class="{ input:true, 'is-danger':errors.email.length > 0 }" 
                                 type="text" 
                                 placeholder="Email">
                         </div>
@@ -93,25 +92,25 @@ export default {
                     text: data.text
                 });
 
-                this.$router.push('/dashboard');
+                this.$router.push({name: 'dashboard.stats'});
             })
             .catch(error => {
                 this.$notify({
                     group: 'messages',
                     title: 'Error',
                     type: 'error',
-                    text: error.data.message.text
+                    text: error.text
                 });
 
-                if (!error.data.message.data) {
+                if (!error.data) {
                     this.errors.email = [];
                     this.errors.password = [];
 
                     return false;
                 }
 
-                const emailErrors = error.data.message.data.email;
-                const passwordErrors = error.data.message.data.password;
+                const emailErrors = error.data.email;
+                const passwordErrors = error.data.password;
 
                 this.errors.email = emailErrors ? emailErrors : [];
                 this.errors.password = passwordErrors ? passwordErrors : [];

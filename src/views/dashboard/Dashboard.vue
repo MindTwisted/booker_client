@@ -1,0 +1,109 @@
+<template>
+  <div class="dashboard">
+
+    <div class="dashboard__navbar">
+      <navbar></navbar>
+    </div>
+
+    <div class="dashboard__aside">
+      <aside class="menu">
+        <p class="menu-label">
+          General
+        </p>
+        <ul class="menu-list">
+          <li>
+            <router-link v-bind:to="{name: 'dashboard.stats'}" 
+                        active-class="is-active">
+              Stats
+            </router-link>
+          </li>
+        </ul>
+        <p class="menu-label">
+          Resources
+        </p>
+        <ul class="menu-list">
+          <li>
+            <router-link v-bind:to="{name: 'dashboard.events'}"
+                        active-class="is-active">
+              Events
+            </router-link>
+          </li>
+          <li v-if="isAdmin">
+            <router-link v-bind:to="{name: 'dashboard.users'}"
+                        active-class="is-active">
+              Users
+            </router-link>
+          </li>
+          <li v-if="isAdmin">
+            <router-link v-bind:to="{name: 'dashboard.rooms'}"
+                        active-class="is-active">
+              Rooms
+            </router-link>
+          </li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="dashboard__content">
+      <router-view></router-view>
+    </div>
+
+  </div>
+</template>
+
+<script>
+import Vuex from 'vuex'
+import Navbar from '@/components/Navbar'
+
+export default {
+  name: 'dashboard',
+  components: {
+    'navbar': Navbar
+  },
+  computed: {
+    ...Vuex.mapGetters([
+      'isAdmin'
+    ])
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.dashboard {
+  &__navbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+  }
+
+  &__aside {
+    position: fixed;
+    width: 12rem;
+    padding: 0.75rem;
+    left: 0;
+    top: 4rem;
+    z-index: 100;
+  }
+
+  &__content {
+    margin-left: 12rem;
+    padding: 1rem;
+    margin-top: 4rem;
+  }
+
+  @media screen and (max-width: 769px) {
+    &__aside {
+      position: relative;
+      width: 100%;
+    }
+
+    &__content {
+      margin-left: 0;
+      margin-top: 2rem;
+    }
+  }
+}
+</style>
+
+

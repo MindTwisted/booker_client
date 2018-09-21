@@ -1,3 +1,7 @@
+function clearUsers(state) {
+    state.users = [];
+}
+
 const mutations = {
     setAuth(state, data) {
         state.auth = {
@@ -17,11 +21,11 @@ const mutations = {
             role: ''
         };
 
-        // clearCart(state);
-        // clearPaymentTypes(state);
-        // clearOrders(state);
-        // clearUsers(state);
+        clearUsers(state);
     },
+    setUsers(state, users) {
+        state.users = users;
+    }
 }
 
 export default mutations;
