@@ -15,7 +15,16 @@ const getters = {
     },
     getUserById(state) {
         return (id) => {
-            return state.users.filter(user => +user.id === +id)[0];
+            const index = state.users.findIndex(user => +user.id === +id);
+
+            return index !== -1 ? state.users[index] : {};
+        }
+    },
+    getRoomById(state) {
+        return (id) => {
+            const index = state.rooms.findIndex(room => +room.id === +id);
+
+            return index !== -1 ? state.rooms[index] : {};
         }
     }
 }

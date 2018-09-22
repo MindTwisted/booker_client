@@ -138,6 +138,70 @@ const actions = {
                 });
         });
     },
+    getRooms(context) {
+        return new Promise((resolve, reject) => {
+            api.fetchRooms()
+                .then(response => {
+                    context.commit('setRooms', response.data.message.data);
+
+                    resolve();
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text
+                    })
+                });
+        });
+    },
+    addRoom(context, data) {
+        return new Promise((resolve, reject) => {
+            api.addRoom(data)
+                .then(response => {
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text,
+                        data: error.data.message.data
+                    });
+                });
+        });
+    },
+    updateRoom(context, data) {
+        return new Promise((resolve, reject) => {
+            api.updateRoom(data)
+                .then(response => {
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text,
+                        data: error.data.message.data
+                    });
+                });
+        });
+    },
+    deleteRoom(context, id) {
+        return new Promise((resolve, reject) => {
+            api.deleteRoom(id)
+                .then(response => {
+                    context.commit('deleteRoom', id);
+                    
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text
+                    });
+                });
+        });
+    },
 }
 
 export default actions;

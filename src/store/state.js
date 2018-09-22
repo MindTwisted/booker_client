@@ -7,7 +7,8 @@ const state = {
         role: localStorage.getItem('role') || ''
     },
     users: [],
-    events: []
+    events: [],
+    rooms: []
 }
 
 export default state;

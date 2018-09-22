@@ -6,6 +6,10 @@ function clearEvents(state) {
     state.events = [];
 }
 
+function clearRooms(state) {
+    state.rooms = [];
+}
+
 const mutations = {
     setAuth(state, data) {
         state.auth = {
@@ -27,6 +31,7 @@ const mutations = {
 
         clearUsers(state);
         clearEvents(state);
+        clearRooms(state);
     },
     setUsers(state, users) {
         state.users = users;
@@ -40,6 +45,16 @@ const mutations = {
     },
     setEvents(state, events) {
         state.events = events;
+    },
+    setRooms(state, rooms) {
+        state.rooms = rooms;
+    },
+    deleteRoom(state, id) {
+        const index = state.rooms.findIndex(room => +room.id === +id);
+
+        if (index !== -1) {
+            state.rooms.splice(index, 1);
+        }
     },
 }
 

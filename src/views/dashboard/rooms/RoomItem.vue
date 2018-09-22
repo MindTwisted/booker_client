@@ -1,23 +1,16 @@
 <template>
-    <tr class="userItem">
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.role }}</td>
-        <td>{{ user.email }}</td>
+    <tr class="roomItem">
+        <td>{{ room.id }}</td>
+        <td>{{ room.name }}</td>
         <td class="dashboard__actions">
-            <router-link v-bind:to="{name: 'dashboard.users.edit', params: {id: user.id}}" 
+            <router-link v-bind:to="{name: 'dashboard.rooms.edit', params: {id: room.id}}" 
                         class="button is-primary is-small">
                 Edit
             </router-link>
-            <template v-if="+auth.id !== +user.id">
-                <button v-if="!isLoading" 
-                        v-on:click="handleDeleteUser(user.id)"
-                        class="button is-danger is-small">Delete</button>
-                <button v-else class="button is-danger is-small is-loading" disabled>
-                    Delete
-                </button>
-            </template>
-            <button v-else class="button is-danger is-small" title="User can't delete himself." disabled>
+            <button v-if="!isLoading" 
+                    v-on:click="handleDeleteRoom(room.id)"
+                    class="button is-danger is-small">Delete</button>
+            <button v-else class="button is-danger is-small is-loading" disabled>
                 Delete
             </button>
         </td>
@@ -28,9 +21,9 @@
 import Vuex from 'vuex'
 
 export default {
-    name: 'user-item',
+    name: 'room-item',
     props: {
-        user: {
+        room: {
             type: Object,
             required: true
         }
@@ -47,12 +40,12 @@ export default {
     },
     methods: {
         ...Vuex.mapActions([
-            'deleteUser'
+            'deleteRoom'
         ]),
-        handleDeleteUser(id) {
+        handleDeleteRoom(id) {
             this.isLoading = true;
 
-            this.deleteUser(id)
+            this.deleteRoom(id)
                 .then(data => {
                     this.$notify({
                         group: 'messages',

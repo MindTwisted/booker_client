@@ -82,6 +82,10 @@ export default new Router({
           name: 'dashboard.users.edit',
           component: () => import ('./views/dashboard/users/Edit.vue'),
           beforeEnter: (to, from, next) => {
+            if (!store.getters.isAdmin) {
+              return next({name: 'dashboard.stats'});
+            } 
+            
             if (store.state.users.length === 0) {
               return next({name: 'dashboard.users'});
             }
@@ -94,7 +98,29 @@ export default new Router({
           name: 'dashboard.rooms',
           component: () => import ('./views/dashboard/rooms/Rooms.vue'),
           beforeEnter: checkAdmin
-        }
+        },
+        {
+          path: 'rooms/create',
+          name: 'dashboard.rooms.create',
+          component: () => import ('./views/dashboard/rooms/Create.vue'),
+          beforeEnter: checkAdmin
+        },
+        {
+          path: 'rooms/:id/edit',
+          name: 'dashboard.rooms.edit',
+          component: () => import ('./views/dashboard/rooms/Edit.vue'),
+          beforeEnter: (to, from, next) => {
+            if (!store.getters.isAdmin) {
+              return next({name: 'dashboard.stats'});
+            } 
+            
+            if (store.state.rooms.length === 0) {
+              return next({name: 'dashboard.rooms'});
+            }
+
+            return next();
+          }
+        },
       ]
     },
     {
