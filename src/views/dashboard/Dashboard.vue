@@ -17,17 +17,17 @@
               Stats
             </router-link>
           </li>
+          <li>
+            <router-link v-bind:to="{name: 'dashboard.booking'}"
+                        active-class="is-active">
+              Booking
+            </router-link>
+          </li>
         </ul>
         <p class="menu-label">
           Resources
         </p>
         <ul class="menu-list">
-          <li>
-            <router-link v-bind:to="{name: 'dashboard.events'}"
-                        active-class="is-active">
-              Events
-            </router-link>
-          </li>
           <li v-if="isAdmin">
             <router-link v-bind:to="{name: 'dashboard.users'}"
                         active-class="is-active">

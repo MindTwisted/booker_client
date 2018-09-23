@@ -61,9 +61,9 @@ export default new Router({
           component: () => import ('./views/dashboard/stats/Stats.vue'),
         },
         {
-          path: 'events',
-          name: 'dashboard.events',
-          component: () => import ('./views/dashboard/events/Events.vue'),
+          path: 'booking',
+          name: 'dashboard.booking',
+          component: () => import ('./views/dashboard/booking/Booking.vue'),
         },
         {
           path: 'users',

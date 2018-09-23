@@ -53,6 +53,8 @@ const actions = {
             localStorage.removeItem('name');
             localStorage.removeItem('email');
             localStorage.removeItem('role');
+            localStorage.removeItem('weekStart');
+            localStorage.removeItem('timeFormat');
 
             resolve({
                 text: `User '${name}' was successfully logged out.`

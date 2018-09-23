@@ -8,7 +8,11 @@ const state = {
     },
     users: [],
     events: [],
-    rooms: []
+    rooms: [],
+    settings: {
+        weekStart: localStorage.getItem('weekStart') ||'monday',
+        timeFormat: localStorage.getItem('timeFormat') ||'24h'
+    }
 }
 
 export default state;

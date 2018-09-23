@@ -8,7 +8,7 @@
 </template>
 
 <style lang="scss">
- @import url('https://fonts.googleapis.com/css?family=Raleway:300,400');
+ @import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500');
 
 @import '~bulma/sass/utilities/_all';
 @import '~bulma/sass/base/_all';
@@ -20,6 +20,7 @@
 @import '~bulma/sass/elements/table';
 @import '~bulma/sass/elements/other';
 @import '~bulma/sass/elements/box';
+@import '~bulma/sass/elements/tag';
 @import '~bulma/sass/components/dropdown';
 @import '~bulma/sass/components/navbar';
 @import '~bulma/sass/components/modal';
