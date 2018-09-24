@@ -23,7 +23,7 @@
 
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
-                            {{ auth.name }}
+                            {{ auth.name ? auth.name : 'John Doe' }}
                         </a>
 
                         <div class="navbar-dropdown">

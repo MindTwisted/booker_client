@@ -2,6 +2,10 @@
     <div class="calendar">
         <div class="calendar__header">
 
+            <div class="calendar__monthInfo">
+                {{ month | getMonthString }} {{ year }}
+            </div>
+
             <div class="calendar__controls">
                 <div class="buttons has-addons">
                     <div v-on:click="handlePrevMonth" class="calendar__prevButton button is-small">
@@ -76,9 +80,6 @@
                 </div>
             </div>
 
-            <div class="calendar__monthInfo">
-                {{ month | getMonthString }} {{ year }}
-            </div>
         </div>
 
         <div class="calendar__body box">
@@ -96,7 +97,8 @@
                         </div>
                         
                         <div class="calendar__events">
-                            <div class="tag is-info" 
+                            <div class="tag" 
+                                v-bind:class="{'is-primary':event.user.id == auth.id, 'is-info':event.user.id != auth.id}"
                                 v-for="(event, i) in getEventsByDay(day)" 
                                 v-bind:key="i">
                                 {{ getFormattedTime(event.start_time, event.end_time) }}
@@ -125,7 +127,7 @@ export default {
             month: '',
             year: '',
             currentDate: {},
-            selectedRoom: ''
+            selectedRoom: ""
         }
     },
     props: {
@@ -148,7 +150,8 @@ export default {
     },
     computed: {
         ...Vuex.mapState([
-            'settings'
+            'settings',
+            'auth'
         ])
     },
     watch: {
@@ -170,6 +173,9 @@ export default {
         },
         rooms() {
             this.selectedRoom = this.rooms[0].name;
+        },
+        selectedRoom() {
+            this.$emit('select-room', this.selectedRoom);
         }
     },
     methods: {
@@ -255,10 +261,40 @@ export default {
                 });
         },
         getFormattedTime(tsStart, tsEnd) {
+            function format24h(date) {
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+
+                hours = hours < 10 ? '0'+hours : hours;
+                minutes = minutes < 10 ? '0'+minutes : minutes;
+
+                const strTime = hours + ':' + minutes;
+
+                return strTime;
+            }
+
+            function formatAMPM(date) {
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                let ampm = hours >= 12 ? 'pm' : 'am';
+
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                minutes = minutes < 10 ? '0'+minutes : minutes;
+
+                const strTime = hours + ':' + minutes + ' ' + ampm;
+
+                return strTime;
+            }
+
             const startTime = new Date(tsStart * 1000);
             const endTime = new Date(tsEnd * 1000);
 
-            return `${startTime.getHours()}:${startTime.getMinutes()} - ${endTime.getHours()}:${endTime.getMinutes()}`;
+            if (this.settings.timeFormat === '12h') {
+                return `${formatAMPM(startTime)} - ${formatAMPM(endTime)}`;
+            }
+
+            return `${format24h(startTime)} - ${format24h(endTime)}`;
         }
     }
 }
@@ -266,11 +302,16 @@ export default {
 
 <style lang="scss" scoped>
 .calendar {
+    min-width: 40rem;
 
     &__header {
         justify-content: center;
         position: relative;
         margin-bottom: 0.5rem;
+
+        @media screen and (max-width: 1023px) {
+            flex-wrap: wrap;
+        }
     }
 
     &__body {
@@ -283,6 +324,15 @@ export default {
         position: absolute;
         left: 0;
         top: 0.25rem;
+
+        @media screen and (max-width: 1023px) {
+            position: relative;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 479px) {
+            margin-bottom: 1rem;
+        }
 
         & > * {
             margin-right: 0.5rem;
@@ -386,6 +436,3 @@ export default {
     }
 }
 </style>
-
-// TODO responsive calendar header
-// TODO finish time formatting

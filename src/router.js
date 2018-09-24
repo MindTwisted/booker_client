@@ -66,6 +66,18 @@ export default new Router({
           component: () => import ('./views/dashboard/booking/Booking.vue'),
         },
         {
+          path: 'booking/book-it',
+          name: 'dashboard.booking.bookIt',
+          component: () => import ('./views/dashboard/booking/BookIt.vue'),
+          beforeEnter: (to, from, next) => {
+            if (store.state.rooms.length === 0) {
+              return next({name: 'dashboard.booking'});
+            }
+
+            return next();
+          }
+        },
+        {
           path: 'users',
           name: 'dashboard.users',
           component: () => import ('./views/dashboard/users/Users.vue'),

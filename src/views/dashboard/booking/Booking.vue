@@ -5,7 +5,7 @@
         <div class="dashboard__title">
             <h1 class="title">Booking</h1>
         
-            <router-link v-bind:to="{name: 'dashboard.booking.create'}" 
+            <router-link v-bind:to="{name: 'dashboard.booking.bookIt', query: {room: selectedRoom}}" 
                         class="button is-success">
                 Book It
             </router-link>
@@ -13,7 +13,8 @@
 
         <div class="booking__calendar">
             <calendar v-bind:events="events" 
-                    v-bind:rooms="rooms"></calendar>
+                    v-bind:rooms="rooms" 
+                    v-on:select-room="handleSelectRoom"></calendar>
         </div>
 
     </div>
@@ -32,17 +33,21 @@ export default {
     },
     data() {
         return {
-            isLoading: false
+            isLoading: false,
+            selectedRoom: ''
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             vm.isLoading = true;
 
-            const events = vm.getEvents();
-            const rooms = vm.getRooms();
+            let promises = [vm.getEvents(), vm.getRooms()];
 
-            Promise.all([events, rooms])
+            if (vm.isAdmin) {
+                promises.push(vm.getUsers());
+            }
+
+            Promise.all(promises)
                 .then(() => {
 
                 })
@@ -61,13 +66,20 @@ export default {
         ...Vuex.mapState([
             'events',
             'rooms'
+        ]),
+        ...Vuex.mapGetters([
+            'isAdmin'
         ])
     },
     methods: {
         ...Vuex.mapActions([
             'getEvents',
-            'getRooms'
-        ])
+            'getRooms',
+            'getUsers'
+        ]),
+        handleSelectRoom(room) {
+            this.selectedRoom = room;
+        }
     }
 }
 </script>

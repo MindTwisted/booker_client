@@ -24,23 +24,25 @@
             </router-link>
           </li>
         </ul>
-        <p class="menu-label">
-          Resources
-        </p>
-        <ul class="menu-list">
-          <li v-if="isAdmin">
-            <router-link v-bind:to="{name: 'dashboard.users'}"
-                        active-class="is-active">
-              Users
-            </router-link>
-          </li>
-          <li v-if="isAdmin">
-            <router-link v-bind:to="{name: 'dashboard.rooms'}"
-                        active-class="is-active">
-              Rooms
-            </router-link>
-          </li>
-        </ul>
+        <template v-if="isAdmin">
+          <p class="menu-label">
+            Resources
+          </p>
+          <ul class="menu-list">
+            <li>
+              <router-link v-bind:to="{name: 'dashboard.users'}"
+                          active-class="is-active">
+                Users
+              </router-link>
+            </li>
+            <li>
+              <router-link v-bind:to="{name: 'dashboard.rooms'}"
+                          active-class="is-active">
+                Rooms
+              </router-link>
+            </li>
+          </ul>
+        </template>
       </aside>
     </div>
 
