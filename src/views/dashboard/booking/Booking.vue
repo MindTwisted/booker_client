@@ -5,7 +5,7 @@
         <div class="dashboard__title">
             <h1 class="title">Booking</h1>
         
-            <router-link v-bind:to="{name: 'dashboard.booking.bookIt', query: {room: selectedRoom}}" 
+            <router-link v-bind:to="{name: 'dashboard.booking.bookIt', query: {room_id: selectedRoom}}" 
                         class="button is-success">
                 Book It
             </router-link>

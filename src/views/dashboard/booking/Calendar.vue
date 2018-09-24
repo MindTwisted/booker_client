@@ -19,7 +19,8 @@
                 <div class="select is-small calendar__rooms">
                     <select v-model="selectedRoom">
                         <option v-for="room in rooms" 
-                                v-bind:key="room.id">{{ room.name }}</option>
+                                v-bind:key="room.id" 
+                                v-bind:value="room.id">{{ room.name }}</option>
                     </select>
                 </div>
 
@@ -172,7 +173,7 @@ export default {
             deep: true
         },
         rooms() {
-            this.selectedRoom = this.rooms[0].name;
+            this.selectedRoom = this.rooms[0].id;
         },
         selectedRoom() {
             this.$emit('select-room', this.selectedRoom);
@@ -257,7 +258,7 @@ export default {
                         +startTime.getFullYear() === +day.year;
                 })
                 .filter(event => {
-                    return event.room.name == this.selectedRoom;
+                    return +event.room.id === +this.selectedRoom;
                 });
         },
         getFormattedTime(tsStart, tsEnd) {

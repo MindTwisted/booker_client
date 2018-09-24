@@ -140,6 +140,22 @@ const actions = {
                 });
         });
     },
+    addEvent(context, data) {
+        return new Promise((resolve, reject) => {
+            api.addEvent(data)
+                .then(response => {
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
+                    reject({
+                        text: error.data.message.text,
+                        data: error.data.message.data
+                    });
+                });
+        });
+    },
     getRooms(context) {
         return new Promise((resolve, reject) => {
             api.fetchRooms()

@@ -12,5 +12,19 @@ export default {
                     reject(error.response);
                 });
         });
-    }
+    },
+    addEvent(data) {
+        return new Promise((resolve, reject) => {
+            axios.post(
+                    `${rootUrl}/api/events/`,
+                    `room_id=${data.roomId}&user_id=${data.userId}`
+                )
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                });
+        });
+    },
 }
