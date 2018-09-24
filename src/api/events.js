@@ -17,7 +17,7 @@ export default {
         return new Promise((resolve, reject) => {
             axios.post(
                     `${rootUrl}/api/events/`,
-                    `room_id=${data.roomId}&user_id=${data.userId}&start_time=${data.startTime}&end_time=${data.endTime}&description=${data.description}`
+                    `room_id=${data.roomId}&user_id=${data.userId}&start_time=${data.startTime}&end_time=${data.endTime}&description=${data.description}&recur_type=${data.recurType}&recur_duration=${data.recurDuration}`
                 )
                 .then(response => {
                     resolve(response);

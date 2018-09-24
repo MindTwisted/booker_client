@@ -4,7 +4,7 @@
         <div class="dashboard__title">
             <h1 class="title">Book Room '{{ room.name }}'</h1>
         
-            <router-link v-bind:to="{name: 'dashboard.booking'}"
+            <router-link v-bind:to="{name: 'dashboard.booking', query: {room_id: room.id}}"
                         class="button is-success">
                 Back
             </router-link>
@@ -85,6 +85,93 @@
             </div>
 
             <div class="field">
+                <label class="label">
+                    Is this going to be a recurring event?
+                </label>
+                <div class="control">
+                    <label class="radio">
+                        <input type="radio" 
+                            v-bind:value="true" 
+                            v-model="isRecur">
+                        Yes
+                    </label>
+                    <label class="radio">
+                        <input type="radio" 
+                            v-bind:value="false" 
+                            v-model="isRecur">
+                        No
+                    </label>
+                </div>
+            </div>
+
+            <div v-if="isRecur" 
+                class="field">
+                <label class="label">
+                    If it is recurring, specify weekly, bi-weekly or monthly
+                </label>
+                <div class="control">
+                    <label class="radio">
+                        <input type="radio" 
+                            value="weekly" 
+                            v-model="recurType">
+                        Weekly
+                    </label>
+                    <label class="radio">
+                        <input type="radio" 
+                            value="bi-weekly" 
+                            v-model="recurType">
+                        Bi-Weekly
+                    </label>
+                    <label class="radio">
+                        <input type="radio" 
+                            value="monthly" 
+                            v-model="recurType">
+                        Monthly
+                    </label>
+                </div>
+                <ul class="help is-danger">
+                    <li v-for="error in errors.recurType" 
+                        v-bind:key="error">
+                        {{ error | ucfirst }}
+                    </li>
+                </ul>
+            </div>
+
+            <div v-if="isRecur" 
+                class="field">
+                <label class="label">
+                    Specify recurring duration
+                </label>
+                <div v-if="recurType === 'weekly'" 
+                    class="select">
+                    <select v-model="recurDuration">
+                        <option v-for="i in 4" 
+                            v-bind:key="i">{{ i }}</option>
+                    </select>
+                </div>
+                <div v-else-if="recurType === 'bi-weekly'" 
+                    class="select">
+                    <select v-model="recurDuration">
+                        <option v-for="i in 2" 
+                            v-bind:key="i">{{ i }}</option>
+                    </select>
+                </div>
+                <div v-else 
+                    class="select">
+                    <select v-model="recurDuration">
+                        <option v-for="i in 1" 
+                            v-bind:key="i">{{ i }}</option>
+                    </select>
+                </div>
+                <ul class="help is-danger">
+                    <li v-for="error in errors.recurDuration" 
+                        v-bind:key="error">
+                        {{ error | ucfirst }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="field">
                 <button v-if="!isLoading" 
                     v-on:click="handleCreateEvent" 
                     class="button is-success">
@@ -120,17 +207,27 @@ export default {
                 start: {},
                 end: {}
             },
+            isRecur: false,
+            recurType: 'weekly',
+            recurDuration: 1,
             errors: {
                 userId: [],
                 description: [],
                 startTime: [],
-                endTime: []
+                endTime: [],
+                recurType: [],
+                recurDuration: []
             },
             isLoading: false
         }
     },
     mounted() {
         this.userId = this.auth.id;
+    },
+    watch: {
+        recurType() {
+            this.recurDuration = 1;
+        }
     },
     computed: {
         ...Vuex.mapState([
@@ -176,6 +273,9 @@ export default {
 
             const endTime = new Date(`${month}/${date}/${year} ${endHours}:${endMinutes}:00 ${endAMPM}`);
 
+            const recurType = this.isRecur ? this.recurType : '';
+            const recurDuration = this.isRecur ? this.recurDuration : '';
+
             this.isLoading = true;
 
             this.addEvent({
@@ -183,7 +283,9 @@ export default {
                     description: this.description,
                     roomId: this.room.id,
                     startTime: startTime / 1000,
-                    endTime: endTime / 1000
+                    endTime: endTime / 1000,
+                    recurType,
+                    recurDuration
                 })
                 .then(data => {
                     this.$notify({
@@ -194,7 +296,8 @@ export default {
                     });
 
                     this.$router.push({
-                        name: 'dashboard.booking'
+                        name: 'dashboard.booking',
+                        query: {room_id: this.room.id}
                     });
                 })
                 .catch(error => {
@@ -210,6 +313,8 @@ export default {
                         this.errors.description = [];
                         this.errors.startTime = [];
                         this.errors.endTime = [];
+                        this.errors.recurType = [];
+                        this.errors.recurDuration = [];
 
                         return false;
                     }
@@ -218,11 +323,15 @@ export default {
                     const descriptionErrors = error.data.description;
                     const startTimeErrors = error.data.start_time;
                     const endTimeErrors = error.data.end_time;
+                    const recurTypeErrors = error.data.recur_type;
+                    const recurDurationErrors = error.data.recur_duration;
 
                     this.errors.userId = userIdErrors ? userIdErrors : [];
                     this.errors.description = descriptionErrors ? descriptionErrors : [];
                     this.errors.startTime = startTimeErrors ? startTimeErrors : [];
                     this.errors.endTime = endTimeErrors ? endTimeErrors : [];
+                    this.errors.recurType = recurTypeErrors ? recurTypeErrors : [];
+                    this.errors.recurDuration = recurDurationErrors ? recurDurationErrors : [];
                 })
                 .finally(() => this.isLoading = false);
         }

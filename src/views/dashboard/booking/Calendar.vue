@@ -158,6 +158,9 @@ export default {
         ...Vuex.mapState([
             'settings',
             'auth'
+        ]),
+        ...Vuex.mapGetters([
+            'getRoomById'
         ])
     },
     watch: {
@@ -178,7 +181,11 @@ export default {
             deep: true
         },
         rooms() {
-            this.selectedRoom = this.rooms[0].id;
+            const queryId = this.$route.query.room_id;
+            const queryRoom = this.getRoomById(queryId);
+
+            this.selectedRoom = queryRoom.id ? 
+                queryId : this.rooms[0].id;
         },
         selectedRoom() {
             this.$emit('select-room', this.selectedRoom);

@@ -86,10 +86,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
-
-// TODO redirect from bootit to booking with query room_id and display events in this room
-// bookit submit enter click
