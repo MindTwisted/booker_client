@@ -45,7 +45,43 @@
             <div class="field">
                 <label class="label">Event Start Time</label>
                 <time-picker v-model="selectedTime.start" 
-                            v-bind:timeFormat="settings.timeFormat"></time-picker>
+                            v-bind:timeFormat="settings.timeFormat"
+                            v-bind:isError="errors.startTime.length > 0"></time-picker>
+                <ul class="help is-danger">
+                    <li v-for="error in errors.startTime" 
+                        v-bind:key="error">
+                        {{ error | ucfirst }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="field">
+                <label class="label">Event End Time</label>
+                <time-picker v-model="selectedTime.end" 
+                            v-bind:timeFormat="settings.timeFormat"
+                            v-bind:isError="errors.endTime.length > 0"></time-picker>
+                <ul class="help is-danger">
+                    <li v-for="error in errors.endTime" 
+                        v-bind:key="error">
+                        {{ error | ucfirst }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                    <textarea v-model.trim="description"  
+                        class="textarea"
+                        v-bind:class="{ 'is-danger':errors.description.length > 0 }"
+                        placeholder="Description"></textarea>
+                </div>
+                <ul class="help is-danger">
+                    <li v-for="error in errors.description" 
+                        v-bind:key="error">
+                        {{ error | ucfirst }}
+                    </li>
+                </ul>
             </div>
 
             <div class="field">
@@ -78,14 +114,17 @@ export default {
     data() {
         return {
             userId: '',
+            description: '',
             selectedDate: {},
             selectedTime: {
-                start: {
-
-                }
+                start: {},
+                end: {}
             },
             errors: {
-                userId: []
+                userId: [],
+                description: [],
+                startTime: [],
+                endTime: []
             },
             isLoading: false
         }
@@ -119,11 +158,32 @@ export default {
             'addEvent'
         ]),
         handleCreateEvent() {
+            const date = this.selectedDate.date;
+            const month = this.selectedDate.month;
+            const year = this.selectedDate.year;
+
+            const startHours = this.selectedTime.start.hours;
+            const startMinutes = this.selectedTime.start.minutes;
+            const startAMPM = this.selectedTime.start.ampm ? 
+                this.selectedTime.start.ampm : '';
+
+            const startTime = new Date(`${month}/${date}/${year} ${startHours}:${startMinutes}:00 ${startAMPM}`);
+
+            const endHours = this.selectedTime.end.hours;
+            const endMinutes = this.selectedTime.end.minutes;
+            const endAMPM = this.selectedTime.end.ampm ? 
+                this.selectedTime.end.ampm : '';
+
+            const endTime = new Date(`${month}/${date}/${year} ${endHours}:${endMinutes}:00 ${endAMPM}`);
+
             this.isLoading = true;
 
             this.addEvent({
                     userId: this.userId,
-                    roomId: this.room.id
+                    description: this.description,
+                    roomId: this.room.id,
+                    startTime: startTime / 1000,
+                    endTime: endTime / 1000
                 })
                 .then(data => {
                     this.$notify({
@@ -147,13 +207,22 @@ export default {
 
                     if (!error.data) {
                         this.errors.userId = [];
+                        this.errors.description = [];
+                        this.errors.startTime = [];
+                        this.errors.endTime = [];
 
                         return false;
                     }
 
                     const userIdErrors = error.data.user_id;
+                    const descriptionErrors = error.data.description;
+                    const startTimeErrors = error.data.start_time;
+                    const endTimeErrors = error.data.end_time;
 
                     this.errors.userId = userIdErrors ? userIdErrors : [];
+                    this.errors.description = descriptionErrors ? descriptionErrors : [];
+                    this.errors.startTime = startTimeErrors ? startTimeErrors : [];
+                    this.errors.endTime = endTimeErrors ? endTimeErrors : [];
                 })
                 .finally(() => this.isLoading = false);
         }

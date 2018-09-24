@@ -26,6 +26,14 @@ const getters = {
 
             return index !== -1 ? state.rooms[index] : {};
         }
+    },
+    getEventsSortedByStartTime(state) {
+        let localEvents = [...state.events];
+        localEvents.sort((a, b) => {
+            return a.start_time - b.start_time;
+        });
+        
+        return localEvents;
     }
 }
 

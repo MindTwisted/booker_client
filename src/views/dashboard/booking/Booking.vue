@@ -64,12 +64,15 @@ export default {
     },
     computed: {
         ...Vuex.mapState([
-            'events',
             'rooms'
         ]),
         ...Vuex.mapGetters([
-            'isAdmin'
-        ])
+            'isAdmin',
+            'getEventsSortedByStartTime'
+        ]),
+        events() {
+            return this.getEventsSortedByStartTime;
+        }
     },
     methods: {
         ...Vuex.mapActions([
@@ -88,3 +91,5 @@ export default {
 
 </style>
 
+// TODO redirect from bootit to booking with query room_id and display events in this room
+// bookit submit enter click

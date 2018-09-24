@@ -68,6 +68,10 @@ Vue.filter('getMonthString', function (value) {
   return months[value];
 })
 
+Vue.filter('zeroFill', function(value) {
+  return value < 10 ? '0' + value : value;
+})
+
 Vue.use(Notifications)
 Vue.use(VueChartkick, {adapter: Chart})
 

@@ -90,9 +90,12 @@
                 </div>
             </div>
             <div class="calendar__dates">
-                <div v-for="(day, i) in days" v-bind:key="i" class="calendar__item calendar__dayItem">
-                    <div v-if="day" 
-                        v-bind:class="{'current': checkCurrent(day)}">
+                <div v-for="(day, i) in days" 
+                    v-bind:key="i" 
+                    class="calendar__item calendar__dayItem"
+                    v-bind:class="{'calendar__currentDay': day ? checkCurrent(day) : false}">
+
+                    <template v-if="day">
                         <div class="calendar__dateNumber">
                             {{ day.date }}
                         </div>
@@ -105,10 +108,12 @@
                                 {{ getFormattedTime(event.start_time, event.end_time) }}
                             </div>
                         </div>
-                    </div>
+                    </template>
+
                     <template v-else>
                         {{ day }}
                     </template>
+
                 </div>
             </div>
         </div>
@@ -405,17 +410,10 @@ export default {
     &__dayItem {
         min-height: 5rem;
         position: relative;
+    }
 
-        .current {
-            box-sizing: border-box;
-            padding: 0.25rem;
-            background-color: #fcf8e3;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-        }
+    &__currentDay {
+        background-color: #fcf8e3;
     }
 
     &__dateNumber {
