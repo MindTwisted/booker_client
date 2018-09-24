@@ -152,7 +152,7 @@ export default {
 
             hours = hours % 12;
             hours = hours ? hours : 12;
-            minutes = minutes < 10 ? '0'+minutes : minutes;
+            minutes = +minutes < 10 ? '0' + +minutes : minutes;
 
             switch(type) {
                 case 'hours':

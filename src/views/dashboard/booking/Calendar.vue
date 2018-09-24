@@ -103,7 +103,8 @@
                         <div class="calendar__events">
                             <div class="tag" 
                                 v-bind:class="{'is-primary':event.user.id == auth.id, 'is-info':event.user.id != auth.id}"
-                                v-for="(event, i) in getEventsByDay(day)" 
+                                v-for="(event, i) in getEventsByDay(day)"
+                                v-on:click="handleSelectEvent(event)" 
                                 v-bind:key="i">
                                 {{ getFormattedTime(event.start_time, event.end_time) }}
                             </div>
@@ -308,6 +309,9 @@ export default {
             }
 
             return `${format24h(startTime)} - ${format24h(endTime)}`;
+        },
+        handleSelectEvent(event) {
+            this.$emit('select-event', event);
         }
     }
 }
@@ -433,6 +437,7 @@ export default {
         .tag {
             display: block;
             margin-bottom: 0.2rem;
+            cursor: pointer;
         }
     }
 

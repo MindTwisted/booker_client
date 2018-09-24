@@ -14,8 +14,13 @@
         <div class="booking__calendar">
             <calendar v-bind:events="events" 
                     v-bind:rooms="rooms" 
-                    v-on:select-room="handleSelectRoom"></calendar>
+                    v-on:select-room="handleSelectRoom"
+                    v-on:select-event="handleSelectEvent"></calendar>
         </div>
+
+        <event-details v-if="eventDetailsModal.isVisible" 
+            v-bind:event="eventDetailsModal.activeEvent"
+            v-on:remove-modal="handleRemoveEventDetails"></event-details>
 
     </div>
 </template>
@@ -24,17 +29,23 @@
 import Vuex from 'vuex'
 import Loader from '@/components/Loader'
 import Calendar from './Calendar'
+import EventDetails from './EventDetails'
 
 export default {
     name: 'booking',
     components: {
         'loader': Loader,
-        'calendar': Calendar
+        'calendar': Calendar,
+        'event-details': EventDetails
     },
     data() {
         return {
             isLoading: false,
-            selectedRoom: ''
+            selectedRoom: '',
+            eventDetailsModal: {
+                isVisible: false,
+                activeEvent: {}
+            }
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -82,6 +93,18 @@ export default {
         ]),
         handleSelectRoom(room) {
             this.selectedRoom = room;
+        },
+        handleSelectEvent(event) {
+            this.eventDetailsModal = {
+                isVisible: true,
+                activeEvent: event
+            };
+        },
+        handleRemoveEventDetails() {
+            this.eventDetailsModal = {
+                isVisible: false,
+                activeEvent: {}
+            };
         }
     }
 }
