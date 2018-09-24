@@ -27,4 +27,18 @@ export default {
                 });
         });
     },
+    updateEvent(data) {
+        return new Promise((resolve, reject) => {
+            axios.put(
+                    `${rootUrl}/api/events/${data.id}`,
+                    `room_id=${data.roomId}&user_id=${data.userId}&start_time=${data.startTime}&end_time=${data.endTime}&description=${data.description}&recur_id=${data.recurId}`
+                )
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                });
+        });
+    },
 }

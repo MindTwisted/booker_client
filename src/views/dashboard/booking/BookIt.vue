@@ -243,11 +243,11 @@ export default {
         room() {
             const room = this.getRoomById(this.$route.query.room_id);
 
-            if (!room.id) {
-                this.$router.push({name: 'dashboard.booking'});
+            if (room && room.id) {
+                return room;
             }
 
-            return room;
+            this.$router.push({name: 'dashboard.booking'});
         }
     },
     methods: {
