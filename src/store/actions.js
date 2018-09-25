@@ -170,6 +170,25 @@ const actions = {
                     });
                 })
                 .catch(error => {
+                    console.log(error);
+                    reject({
+                        text: error.data.message.text,
+                        data: error.data.message.data
+                    });
+                });
+        });
+    },
+    deleteEvent(context, data) {
+        return new Promise((resolve, reject) => {
+            api.deleteEvent(data)
+                .then(response => {
+                    context.commit('deleteEvent', data);
+
+                    resolve({
+                        text: response.data.message.text
+                    });
+                })
+                .catch(error => {
                     reject({
                         text: error.data.message.text,
                         data: error.data.message.data

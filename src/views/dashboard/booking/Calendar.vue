@@ -182,11 +182,13 @@ export default {
             deep: true
         },
         rooms() {
-            const queryId = this.$route.query.room_id;
-            const queryRoom = this.getRoomById(queryId);
+            if (this.rooms.length > 0) {
+                const queryId = this.$route.query.room_id;
+                const queryRoom = this.getRoomById(queryId);
 
-            this.selectedRoom = queryRoom && queryRoom.id ? 
-                queryId : this.rooms[0].id;
+                this.selectedRoom = queryRoom && queryRoom.id ? 
+                    queryId : this.rooms[0].id;
+            }
         },
         selectedRoom() {
             this.$emit('select-room', this.selectedRoom);

@@ -41,4 +41,18 @@ export default {
                 });
         });
     },
+    deleteEvent(data) {
+        return new Promise((resolve, reject) => {
+            axios.delete(
+                    `${rootUrl}/api/events/${data.id}`,
+                    {data: `recur_id=${data.recurId}`}
+                )
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                });
+        });
+    },
 }

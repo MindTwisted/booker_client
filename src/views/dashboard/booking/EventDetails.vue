@@ -180,7 +180,8 @@ export default {
     },
     methods: {
         ...Vuex.mapActions([
-            'updateEvent'
+            'updateEvent',
+            'deleteEvent'
         ]),
         handleRemoveModal() {
             this.$emit('remove-modal');
@@ -265,7 +266,33 @@ export default {
                 .finally(() => this.isLoadingUpdate = false);
         },
         handleDeleteEvent() {
+            this.isLoadingDelete = true;
 
+            const recurId = this.isRecur ? this.event.recur_id : '';
+
+            this.deleteEvent({
+                    id: this.event.id,
+                    recurId
+                })
+                .then(data => {
+                    this.$notify({
+                        group: 'messages',
+                        title: 'Success',
+                        type: 'success',
+                        text: data.text
+                    });
+
+                    this.handleRemoveModal();
+                })
+                .catch(error => {
+                    this.$notify({
+                        group: 'messages',
+                        title: 'Error',
+                        type: 'error',
+                        text: error.text
+                    });
+                })
+                .finally(() => this.isLoadingDelete = false);
         }
     }
 }

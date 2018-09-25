@@ -47,7 +47,13 @@ const mutations = {
         state.events = events;
     },
     updateEvent(state, payload) {
-        const user = state.users.find(user => +user.id === +payload.data.userId);
+        const user = state.auth.role === 'admin' ?
+            state.users.find(user => +user.id === +payload.data.userId) :
+            {
+                id: state.auth.id,
+                name: state.auth.name,
+                email: state.auth.email
+            };
 
         if (!payload.data.recurId) {
             const index = state.events.findIndex(event => +event.id === +payload.data.id);
@@ -55,8 +61,10 @@ const mutations = {
             state.events[index].description = payload.data.description;
             state.events[index].start_time = payload.data.startTime;
             state.events[index].end_time = payload.data.endTime;
-            state.events[index].user = user;
             state.events[index].recur_id = payload.newRecurId;
+            state.events[index].user.id = user.id;
+            state.events[index].user.name = user.name;
+            state.events[index].user.email = user.email;
 
             return;
         }
@@ -76,11 +84,26 @@ const mutations = {
                     event.description = payload.data.description;
                     event.start_time = newStartTime / 1000;
                     event.end_time = newEndTime / 1000;
-                    event.user = user;
                     event.recur_id = payload.newRecurId;
+                    event.user.id = user.id;
+                    event.user.name = user.name;
+                    event.user.email = user.email;
             }
 
             return event;
+        });
+    },
+    deleteEvent(state, data) {
+        if (!data.recurId) {
+            const index = state.events.findIndex(event => +event.id === +data.id);
+
+            if (index !== -1) {
+                state.events.splice(index, 1);
+            }
+        }
+
+        state.events = state.events.filter(event => {
+            return !(event.id >= data.id && +event.recur_id === +data.recurId);
         });
     },
     setRooms(state, rooms) {
