@@ -170,7 +170,6 @@ const actions = {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
                     reject({
                         text: error.data.message.text,
                         data: error.data.message.data

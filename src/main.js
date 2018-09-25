@@ -37,7 +37,7 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   });
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true;
 
 Vue.directive('focus', {
   inserted: function (el) {
