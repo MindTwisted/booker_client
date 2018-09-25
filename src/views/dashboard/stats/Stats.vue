@@ -5,8 +5,24 @@
         </div>
 
         <div class="box stats__box">
-            <h2 class="is-size-5">Events activity</h2>
-            <area-chart :data="getAreaChartData()"></area-chart>
+            <h2 class="is-size-5">
+                Events activity
+                <div class="select is-small calendar__rooms">
+                    <select v-model="selectedRoom">
+                        <option v-for="room in rooms" 
+                                v-bind:key="room.id" 
+                                v-bind:value="room.id">{{ room.name }}</option>
+                    </select>
+                </div>
+            </h2>
+            <column-chart :data="getColumnChartData()"></column-chart>
+        </div>
+
+        <div class="box stats__box">
+            <h2 class="is-size-5">
+                Rooms usage
+            </h2>
+            <pie-chart :data="getPieChartData()"></pie-chart>
         </div>
     </div>
 </template>
@@ -17,11 +33,17 @@ import api from '@/api'
 
 export default {
     name: 'stats',
+    data() {
+        return {
+            selectedRoom: ''
+        }
+    },
     beforeRouteEnter(to, from, next) {
-        api.fetchEvents()
+        Promise.all([api.fetchEvents(), api.fetchRooms()])
             .then(response => {
                 next(vm => {
-                    vm.setEvents(response.data.message.data);
+                    vm.setEvents(response[0].data.message.data);
+                    vm.setRooms(response[1].data.message.data);
                 })
             })
             .catch(error => {
@@ -35,29 +57,58 @@ export default {
                 })
             });
     },
+    watch: {
+        rooms() {
+            if (this.rooms.length > 0) {
+                this.selectedRoom = this.rooms[0].id;
+            }
+        },
+    },
     computed: {
         ...Vuex.mapState([
-            'events'
+            'events',
+            'rooms'
         ])
     },
     methods: {
         ...Vuex.mapMutations([
-            'setEvents'
+            'setEvents',
+            'setRooms'
         ]),
-        getAreaChartData() {
+        getColumnChartData() {
             let data = {};
 
-            this.events.map(event => {
-                let date = new Date(event.created_at * 1000);
+            this.events
+                .filter(event => {
+                    return +event.room.id === +this.selectedRoom;
+                })
+                .map(event => {
+                    let dateString = (new Date(event.start_time * 1000))
+                        .toDateString().split(' ').splice(1).join(' ');
 
-                if (!data[date]) {
-                    data[date] = 0;
-                }
-                
-                data[date]++;
-            });
+                    if (!data[dateString]) {
+                        data[dateString] = 1;
+                    } else {
+                        data[dateString]++;
+                    }
+                });
 
             return data;
+        },
+        getPieChartData() {
+            let roomsStats = {};
+
+            this.events.map(event => {
+                const roomName = event.room.name;
+
+                if (!roomsStats[roomName]) {
+                    roomsStats[roomName] = 1;
+                } else {
+                    roomsStats[roomName]++;
+                }
+            });
+
+            return roomsStats;
         }
     }
 }
