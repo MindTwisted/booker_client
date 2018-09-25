@@ -185,7 +185,7 @@ export default {
             const queryId = this.$route.query.room_id;
             const queryRoom = this.getRoomById(queryId);
 
-            this.selectedRoom = queryRoom.id ? 
+            this.selectedRoom = queryRoom && queryRoom.id ? 
                 queryId : this.rooms[0].id;
         },
         selectedRoom() {

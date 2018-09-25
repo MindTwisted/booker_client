@@ -295,7 +295,3 @@ export default {
     }
 }
 </style>
-
-
-// TODO update event in vuex state
-// TODO delete event

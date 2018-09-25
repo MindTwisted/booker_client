@@ -160,6 +160,11 @@ const actions = {
         return new Promise((resolve, reject) => {
             api.updateEvent(data)
                 .then(response => {
+                    context.commit('updateEvent', {
+                        data,
+                        newRecurId: response.data.message.data.recurId   
+                    });
+
                     resolve({
                         text: response.data.message.text
                     });
