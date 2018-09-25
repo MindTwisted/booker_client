@@ -30,6 +30,8 @@ axios.interceptors.response.use(
       localStorage.removeItem('name');
       localStorage.removeItem('email');
       localStorage.removeItem('role');
+      localStorage.removeItem('weekStart');
+      localStorage.removeItem('timeFormat');
 
       router.push({name: 'login'});
     }
