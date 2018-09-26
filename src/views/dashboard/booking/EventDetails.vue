@@ -5,7 +5,10 @@
                 v-on:click="handleRemoveModal"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">Event #{{ event.id }} Details</p>
+                    <p class="modal-card-title">
+                        Event #{{ event.id }} Details
+                    </p>
+                    
                     <button class="delete" 
                             v-on:click="handleRemoveModal"
                             aria-label="close"></button>
@@ -20,10 +23,16 @@
                         <div v-if="isAdmin" 
                             class="control select" 
                             v-bind:class="{ 'is-danger':errors.userId.length > 0 }">
-                            <select v-model="userId">
+                            <select v-if="userId" 
+                                    v-model="userId">
                                 <option v-for="user in users" 
                                         v-bind:key="user.id" 
                                         v-bind:value="user.id">{{ user.name }}</option>
+                            </select>
+                            <select v-else>
+                                <option v-bind:value="event.user.id">
+                                    {{ event.user.name }}
+                                </option>
                             </select>
                         </div>
                         <div v-else class="control select">
@@ -94,6 +103,12 @@
                         </label>
                     </div>
 
+                    <div class="field">
+                        <label class="label is-size-6 is-italic">
+                            Created At: {{ event.created_at | unixToString(settings.timeFormat) }}
+                        </label>
+                    </div>
+
                     <div v-if="isEditable" 
                         class="field is-grouped">
                         <p class="control">
@@ -159,7 +174,8 @@ export default {
         }
     },
     mounted() {
-        this.userId = this.event.user.id;
+        this.userId = this.getUserById(this.event.user.id).id ?
+            this.event.user.id : null;
         this.description = this.event.description;
     },
     computed: {
@@ -169,7 +185,8 @@ export default {
             'settings'
         ]),
         ...Vuex.mapGetters([
-            'isAdmin'
+            'isAdmin',
+            'getUserById'
         ]),
         isEditable() {
             const isOwner = +this.auth.id === +this.event.user.id;
