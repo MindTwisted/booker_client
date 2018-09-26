@@ -3,10 +3,10 @@
         <div class="calendar__header">
             <div v-on:click="handlePrevMonth" 
                 class="calendar__prevMonth">
-                &larr;
+                <img src="@/assets/angle-down.png" alt="Arrow Left">
             </div>
             <div class="calendar__monthInfo">
-                {{ month + "/" + year }}
+                {{ month | getMonthString }} {{ year }}
                 <div v-on:click="resetCalendar" 
                     v-if="checkSwitched()" 
                     class="calendar__reset">
@@ -15,7 +15,7 @@
             </div>
             <div v-on:click="handleNextMonth" 
                 class="calendar__nextMonth">
-                &rarr;
+                <img src="@/assets/angle-down.png" alt="Arrow Right">
             </div>
         </div>
         <div class="calendar__body">
@@ -193,7 +193,22 @@ $accentColor: hsl(171, 100%, 41%);
     &__nextMonth {
         padding: 1rem;
         cursor: pointer;
-        font-size: 1.5rem;
+
+        img {
+            width: 1.1rem;
+        }
+    }
+
+    &__prevMonth {
+        img {
+            transform: rotateZ(90deg);
+        }
+    }
+
+     &__nextMonth {
+        img {
+            transform: rotateZ(-90deg);
+        }
     }
 
     &__monthInfo {

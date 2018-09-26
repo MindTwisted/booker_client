@@ -102,7 +102,7 @@
                         
                         <div class="calendar__events">
                             <div class="tag" 
-                                v-bind:class="{'is-primary':event.user.id == auth.id, 'is-info':event.user.id != auth.id}"
+                                v-bind:class="{'is-success':event.user.id == auth.id, 'is-info':event.user.id != auth.id}"
                                 v-for="(event, i) in getEventsByDay(day)"
                                 v-on:click="handleSelectEvent(event)" 
                                 v-bind:key="i">
@@ -321,7 +321,7 @@ export default {
 
 <style lang="scss" scoped>
 .calendar {
-    min-width: 40rem;
+    min-width: 65rem;
 
     &__header {
         justify-content: center;
