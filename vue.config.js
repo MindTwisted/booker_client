@@ -1,3 +1,3 @@
 module.exports = {
-    // baseUrl: '/~user5/booker-client/'
+    baseUrl: '/~user5/booker-client/'
 }
