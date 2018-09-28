@@ -39,9 +39,7 @@ const mutations = {
     deleteUser(state, id) {
         const index = state.users.findIndex(user => +user.id === +id);
 
-        if (index !== -1) {
-            state.users.splice(index, 1);
-        }
+        state.users.splice(index, 1);
     },
     setEvents(state, events) {
         state.events = events;
@@ -97,9 +95,9 @@ const mutations = {
         if (!data.recurId) {
             const index = state.events.findIndex(event => +event.id === +data.id);
 
-            if (index !== -1) {
-                state.events.splice(index, 1);
-            }
+            state.events.splice(index, 1);
+
+            return;
         }
 
         state.events = state.events.filter(event => {
@@ -112,9 +110,7 @@ const mutations = {
     deleteRoom(state, id) {
         const index = state.rooms.findIndex(room => +room.id === +id);
 
-        if (index !== -1) {
-            state.rooms.splice(index, 1);
-        }
+        state.rooms.splice(index, 1);
     },
 }
 

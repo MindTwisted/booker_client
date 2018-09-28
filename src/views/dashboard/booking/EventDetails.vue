@@ -20,19 +20,13 @@
 
                     <div class="field">
                         <label class="label">User</label>
-                        <div v-if="isAdmin" 
+                        <div v-if="isAdmin && isEditable" 
                             class="control select" 
                             v-bind:class="{ 'is-danger':errors.userId.length > 0 }">
-                            <select v-if="userId" 
-                                    v-model="userId">
+                            <select v-model="userId">
                                 <option v-for="user in users" 
                                         v-bind:key="user.id" 
                                         v-bind:value="user.id">{{ user.name }}</option>
-                            </select>
-                            <select v-else>
-                                <option v-bind:value="event.user.id">
-                                    {{ event.user.name }}
-                                </option>
                             </select>
                         </div>
                         <div v-else class="control select">
@@ -174,8 +168,7 @@ export default {
         }
     },
     mounted() {
-        this.userId = this.getUserById(this.event.user.id).id ?
-            this.event.user.id : null;
+        this.userId = this.event.user.id;
         this.description = this.event.description;
     },
     computed: {
@@ -185,8 +178,7 @@ export default {
             'settings'
         ]),
         ...Vuex.mapGetters([
-            'isAdmin',
-            'getUserById'
+            'isAdmin'
         ]),
         isEditable() {
             const isOwner = +this.auth.id === +this.event.user.id;

@@ -5,9 +5,12 @@ import router from './router'
 import Notifications from 'vue-notification'
 import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js'
+import ClickOutside from 'vue-click-outside'
 
 import App from './App.vue'
 import store from './store/index'
+
+import { zeroFill, formatAMPM } from '@/functions'
 
 const AUTH_TOKEN = localStorage.getItem('token');
 
@@ -47,6 +50,8 @@ Vue.directive('focus', {
   }
 })
 
+Vue.directive('click-outside', ClickOutside)
+
 Vue.filter('ucfirst', function (value) {
   return value[0].toUpperCase() + value.slice(1);
 })
@@ -70,30 +75,14 @@ Vue.filter('getMonthString', function (value) {
   return months[value];
 })
 
-Vue.filter('zeroFill', function(value) {
-  return +value < 10 ? '0' + +value : +value;
-})
+Vue.filter('zeroFill', zeroFill)
 
 Vue.filter('unixToString', function(value, format) {
   const date = new Date(value * 1000);
-
-  function formatAMPM(date) {
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let ampm = hours >= 12 ? 'pm' : 'am';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-
-    const strTime = hours + ':' + minutes + ' ' + ampm;
-
-    return strTime;
-  }
-  
+ 
   if (format === '24h') {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const hours = zeroFill(date.getHours());
+    const minutes = zeroFill(date.getMinutes());
     
     return `${hours}:${minutes}, ${date.toDateString()}`;
   }

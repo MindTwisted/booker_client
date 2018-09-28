@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
 import Timer from './Timer'
 
 export default {
@@ -95,9 +94,6 @@ export default {
 
             this.$emit('input', this.pickedTime);
         }
-    },
-    directives: {
-        ClickOutside
     }
 }
 </script>

@@ -29,6 +29,7 @@ const getters = {
     },
     getEventsSortedByStartTime(state) {
         let localEvents = [...state.events];
+        
         localEvents.sort((a, b) => {
             return a.start_time - b.start_time;
         });

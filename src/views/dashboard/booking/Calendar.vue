@@ -123,6 +123,7 @@
 
 <script>
 import Vuex from 'vuex'
+import { format24h, formatAMPM } from '@/functions'
 
 export default {
     name: 'calendar',
@@ -277,32 +278,6 @@ export default {
                 });
         },
         getFormattedTime(tsStart, tsEnd) {
-            function format24h(date) {
-                let hours = date.getHours();
-                let minutes = date.getMinutes();
-
-                hours = hours < 10 ? '0'+hours : hours;
-                minutes = minutes < 10 ? '0'+minutes : minutes;
-
-                const strTime = hours + ':' + minutes;
-
-                return strTime;
-            }
-
-            function formatAMPM(date) {
-                let hours = date.getHours();
-                let minutes = date.getMinutes();
-                let ampm = hours >= 12 ? 'pm' : 'am';
-
-                hours = hours % 12;
-                hours = hours ? hours : 12;
-                minutes = minutes < 10 ? '0'+minutes : minutes;
-
-                const strTime = hours + ':' + minutes + ' ' + ampm;
-
-                return strTime;
-            }
-
             const startTime = new Date(tsStart * 1000);
             const endTime = new Date(tsEnd * 1000);
 
